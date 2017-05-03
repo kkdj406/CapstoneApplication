@@ -1,8 +1,12 @@
 package com.example.capstoneapplication;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.support.design.widget.FloatingActionButton;
@@ -13,10 +17,17 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
 public class MainActivity extends AppCompatActivity {
     static final int ActID = 1;
     Uri imgUri;
     ImageView iv;
+    byte[] ib;
+    Bitmap bitmap;
+
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -61,7 +72,9 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_save) {
-            SaveLoad.storeByteImage()
+
+            ib = SaveLoad.getByteArrayImage(iv);
+            SaveLoad.storeByteImage(ib);
             return true;
 
         }
@@ -74,9 +87,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onActivityResult(int activityID, int resultCode, Intent intent){
-        imgUri = SaveLoad.loadByteImage(activityID,ActID,resultCode,intent);
-        iv.setImageURI(imgUri);
+    public void onActivityResult(int activityID, int resultCode, Intent intent) {
+        Log.v("koreanmagpie", "onActivityResult1");
+//        bitmap = SaveLoad.loadByteImage(activityID,ActID,resultCode,intent);
+        Log.v("koreanmagpie", "onActivityResult2");
+        if (activityID == ActID && resultCode == Activity.RESULT_OK) {
+            try {
+                InputStream stream = getContentResolver().openInputStream(
+                        intent.getData());
+                bitmap = BitmapFactory.decodeStream(stream);
+                stream.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            iv.setImageBitmap(bitmap);
+
+//        iv.setImageURI(imgUri);
+            Log.v("koreanmagpie", "onActivityResult3");
+        }
     }
 
 
