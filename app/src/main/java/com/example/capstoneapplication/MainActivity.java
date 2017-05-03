@@ -1,6 +1,9 @@
 package com.example.capstoneapplication;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,6 +14,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
+    static final int ActID = 1;
+    Uri imgUri;
+    ImageView iv;
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -20,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        iv = (ImageView)findViewById(R.id.iv);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -32,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
 
         // Example of a call to a native method
 
@@ -53,15 +61,27 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_save) {
+            SaveLoad.storeByteImage()
+            return true;
+
+        }
+        if (id == R.id.action_load){
+            SaveLoad.openImage(this, ActID);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A native method that is implemented by the 'native-lib' native library,
-     * which is packaged with this application.
-     */
+    @Override
+    public void onActivityResult(int activityID, int resultCode, Intent intent){
+        imgUri = SaveLoad.loadByteImage(activityID,ActID,resultCode,intent);
+        iv.setImageURI(imgUri);
+    }
+
+
+
+
     public native String stringFromJNI();
 }
+
