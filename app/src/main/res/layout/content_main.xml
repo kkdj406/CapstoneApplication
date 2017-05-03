@@ -7,41 +7,48 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.capstoneapplication.MainActivity"
     tools:showIn="@layout/activity_main">
+
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
+
         <RadioGroup
+            android:id="@+id/radiogroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_above="@+id/iv"
             android:layout_alignParentLeft="true"
-            android:orientation="horizontal"
-            android:id="@+id/radiogroup">
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/previewFrame"
+            android:layout_toStartOf="@+id/previewFrame"
+            android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/radioPen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                />
+                android:layout_weight="1" />
 
             <RadioButton
                 android:id="@+id/radioEraser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                />
+                android:layout_weight="1" />
         </RadioGroup>
+
+        <FrameLayout
+            android:id="@+id/previewFrame"
+            android:layout_width="160dp"
+            android:layout_height="120dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true" />
+
         <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_below="@id/radiogroup"
-            android:id="@+id/iv" />
-        <org.opencv.android.JavaCameraView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_below="@id/iv"
-            android:id="@+id/activity_surface_view" />
+            android:id="@+id/iv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/previewFrame" />
+
 
     </RelativeLayout>
 

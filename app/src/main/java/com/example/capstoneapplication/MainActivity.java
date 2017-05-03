@@ -2,11 +2,15 @@ package com.example.capstoneapplication;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.support.design.widget.FloatingActionButton;
@@ -16,17 +20,25 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
     static final int ActID = 1;
-    Uri imgUri;
+
     ImageView iv;
+    Toolbar tb;
+    FrameLayout previewFrame;
+    FloatingActionButton fab;
+
     byte[] ib;
-    Bitmap bitmap;
+    Bitmap originalBm;
+
+    String selectedImagePath;
 
 
     // Used to load the 'native-lib' library on application startup.
@@ -37,12 +49,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        iv = (ImageView)findViewById(R.id.iv);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        tb = (Toolbar) findViewById(R.id.toolbar);
+        iv = (ImageView)findViewById(R.id.iv);
+        previewFrame = (FrameLayout) findViewById(R.id.previewFrame);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        setSupportActionBar(tb);
+
+        //카메라 설정
+        final CameraSurfaceView cameraView = new CameraSurfaceView(getApplicationContext());
+        previewFrame.addView(cameraView);
+
+        //FAB설정
+
+        /* floating button eventListener
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -50,10 +72,7 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
-
-        // Example of a call to a native method
-
+        */
     }
 
     @Override
@@ -72,46 +91,35 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_save) {
+            Log.d("DJ","action_save");
+            SaveLoad.saveBitmaptoJpeg(((BitmapDrawable)iv.getDrawable()).getBitmap());
 
-            ib = SaveLoad.getByteArrayImage(iv);
-            SaveLoad.storeByteImage(ib);
             return true;
 
-        }
-        if (id == R.id.action_load){
-            SaveLoad.openImage(this, ActID);
+        }else if (id == R.id.action_load){
+            Intent intentIG = new Intent(Intent.ACTION_GET_CONTENT);
+            intentIG.setType("image/*");
+            startActivityForResult(intentIG, ActID);
+
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     public void onActivityResult(int activityID, int resultCode, Intent intent) {
-        Log.v("koreanmagpie", "onActivityResult1");
-//        bitmap = SaveLoad.loadByteImage(activityID,ActID,resultCode,intent);
-        Log.v("koreanmagpie", "onActivityResult2");
-        if (activityID == ActID && resultCode == Activity.RESULT_OK) {
-            try {
-                InputStream stream = getContentResolver().openInputStream(
-                        intent.getData());
-                bitmap = BitmapFactory.decodeStream(stream);
-                stream.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        super.onActivityResult(activityID, resultCode, intent);
 
-            iv.setImageBitmap(bitmap);
+        if(activityID == ActID && resultCode == Activity.RESULT_OK){
+            Uri uri = intent.getData();
+            try{originalBm = MediaStore.Images.Media.getBitmap(
+                    this.getContentResolver(),uri);
+            }catch(IOException e){}
 
-//        iv.setImageURI(imgUri);
-            Log.v("koreanmagpie", "onActivityResult3");
+            iv.setImageURI(uri);
         }
     }
-
-
-
 
     public native String stringFromJNI();
 }
