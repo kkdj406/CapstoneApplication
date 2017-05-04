@@ -11,44 +11,59 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
-
-        <RadioGroup
-            android:id="@+id/radiogroup"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/iv"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/previewFrame"
-            android:layout_toStartOf="@+id/previewFrame"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/radioPen"
+            android:orientation="horizontal"
+            android:id="@+id/buttonLayout">
+            <RadioGroup
+                android:id="@+id/radiogroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:orientation="horizontal">
 
-            <RadioButton
-                android:id="@+id/radioEraser"
-                android:layout_width="wrap_content"
+                <RadioButton
+                    android:id="@+id/radioPen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <RadioButton
+                    android:id="@+id/radioEraser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/btnRot90"
+                android:layout_width="49dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
-        </RadioGroup>
+                android:text="90" />
 
-        <FrameLayout
-            android:id="@+id/previewFrame"
-            android:layout_width="160dp"
-            android:layout_height="120dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true" />
+            <Button
+                android:id="@+id/btnRot270"
+                android:layout_width="49dp"
+                android:layout_height="wrap_content"
+                android:text="270" />
+        </LinearLayout>
+
+
+
+
+
 
         <ImageView
             android:id="@+id/iv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/previewFrame" />
-
+            android:layout_below="@+id/buttonLayout" />
+        <FrameLayout
+            android:id="@+id/previewFrame"
+            android:layout_width="90dp"
+            android:layout_height="160dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
 
