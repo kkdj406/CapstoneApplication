@@ -11,7 +11,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
 
 /**
  * Created by hanee on 2017-05-07.
@@ -41,6 +40,8 @@ class Paper extends View {
 
         canvas.drawPath(path, paint);
     }
+
+
     public void drawBm(Bitmap bm){
         setBackgroundDrawable(new BitmapDrawable(bm));
     }

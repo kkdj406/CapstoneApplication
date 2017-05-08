@@ -3,6 +3,7 @@ package com.example.capstoneapplication;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -70,12 +71,14 @@ public class MainActivity extends AppCompatActivity {
         });
         */
 
+//////////////////////View Backgroung Color Setting////////////////////////////////////////
+        paper.setBackgroundColor(Color.WHITE);
 ///////////////////////회전 버튼////////////////////////////////////////////////////////////////////////////
         //90도 회전
         btnRot90.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                paper.setRotation(90*(1+(rotIndex%4)));
+                paper.setRotation(90+90*(rotIndex%4));
                 rotIndex++;
             }
         });
@@ -83,8 +86,9 @@ public class MainActivity extends AppCompatActivity {
         btnRot270.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                paper.setRotation(270*(1+(rotIndex%4)));
-                rotIndex++;
+                rotIndex--;
+                paper.setRotation(90*(rotIndex%4));
+
             }
         });
 ///////////////////////회전 버튼////////////////////////////////////////////////////////////////////////////
@@ -106,25 +110,17 @@ public class MainActivity extends AppCompatActivity {
             Intent intentIG = new Intent(Intent.ACTION_GET_CONTENT);
             intentIG.setType("image/*");
             startActivityForResult(intentIG, ActID);
-            rotIndex = 0;
+            rotIndex =0;
 
             return true;
         }
         else if (id == R.id.action_save) {
 
             paper.setDrawingCacheEnabled(true);
-
             paper.buildDrawingCache();
 
             SaveLoad.saveBitmaptoJpeg(paper.getDrawingCache());
             Toast.makeText(MainActivity.this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
-
-
-            /* Log.v("DJ","action_save");
-            if(originalBm!=null){
-                SaveLoad.saveBitmaptoJpeg(((BitmapDrawable)iv.getDrawable()).getBitmap());
-
-*/
             return true;
         }
         return super.onOptionsItemSelected(item);
