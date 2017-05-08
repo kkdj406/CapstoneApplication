@@ -10,10 +10,11 @@ import android.graphics.Matrix;
  */
 
 public class ImageProc {
-    public static Bitmap rotImage(Bitmap bm,int angle){
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
+    public static void rotImage(Bitmap bm,int angle, Paper p){
+//        Matrix matrix = new Matrix();
+//        matrix.postRotate(angle);
+        p.setRotation(90);
+        //return Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
 
     }
 }
